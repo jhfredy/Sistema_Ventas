@@ -12,19 +12,21 @@ class ArticuloController extends Controller
         if (!$request->ajax())return redirect('/');
         
 
-        $buscar=$request->buscar;
-        $criterio=$request->criterio;
+        
 
-        if ($buscar=='') {
-            $articulos=Articulo::join('categorias','articulos.idcategoria','=','categorias.id')
-            ->select('articulos.id','articulos.idcategoria','articulos.codigo','articulos.nombre','categorias.nombre as nombre_categoria','articulos.precio_venta','articulos.descripcion','articulos.stock','articulos.condicion')
-            ->orderBy('articulos.id','desc')->paginate(3);
-        }else{
-            $articulos=Articulo::join('categorias','articulos.idcategoria','=','categorias.id')
-            ->select('articulos.id','articulos.idcategoria','articulos.codigo','articulos.nombre','categorias.nombre as nombre_categoria','articulos.precio_venta','articulos.descripcion','articulos.stock','articulos.condicion')
-            ->where('articulos'.$criterio,'like','%'.$buscar.'%')
-            ->orderBy('articulos.id','desc')->paginate(3);
-
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+        
+        if ($buscar==''){
+            $articulos = Articulo::join('categorias','articulos.idcategoria','=','categorias.id')
+            ->select('articulos.id','articulos.idcategoria','articulos.codigo','articulos.nombre','categorias.nombre as nombre_categoria','articulos.precio_venta','articulos.stock','articulos.descripcion','articulos.condicion')
+            ->orderBy('articulos.id', 'desc')->paginate(3);
+        }
+        else{
+            $articulos = Articulo::join('categorias','articulos.idcategoria','=','categorias.id')
+            ->select('articulos.id','articulos.idcategoria','articulos.codigo','articulos.nombre','categorias.nombre as nombre_categoria','articulos.precio_venta','articulos.stock','articulos.descripcion','articulos.condicion')
+            ->where('articulos.'.$criterio, 'like', '%'. $buscar . '%')
+            ->orderBy('articulos.id', 'desc')->paginate(3);
             
         }
         return[
